@@ -1,4 +1,4 @@
-# INFORMA Suncity Sidoarjo — internal concept
+# INFORMA Sun City — internal concept
 
 Mobile-first single-screen microsite. Run `npm ci`, then `npm start` and open http://localhost:4173. Three.js renders lifestyle scene transitions; GSAP coordinates the opening and panels. Official lifestyle photos are bundled in assets. Floating foreground crops are 2.5D, not rotatable furniture models.
 
