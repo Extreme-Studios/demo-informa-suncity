@@ -15,15 +15,17 @@ function createServer({keyProvider=getKey,fetcher=fetch}={}){
  let busy=0,requests=[];
  return http.createServer(async(req,res)=>{
   const host=req.headers.host||'';
-  if(!/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host))return json(res,403,{error:'Host tidak diizinkan.'});
+  const local=/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host);
+  const deployed=process.env.VERCEL==='1'&&[process.env.VERCEL_URL,process.env.VERCEL_PROJECT_PRODUCTION_URL,'demo-informa-suncity.vercel.app'].filter(Boolean).includes(host);
+  if(!local&&!deployed)return json(res,403,{error:'Host tidak diizinkan.'});
   let pathname;try{pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname)}catch{return json(res,400,{error:'URL tidak valid.'})}
   if(pathname==='/api/chat'){
    if(req.method!=='POST')return json(res,405,{error:'Gunakan POST.'});
-   if(req.headers.origin&&req.headers.origin!==`http://${host}`)return json(res,403,{error:'Origin tidak diizinkan.'});
+   if(req.headers.origin&&req.headers.origin!==`${deployed?'https':'http'}://${host}`)return json(res,403,{error:'Origin tidak diizinkan.'});
    if(!req.headers['content-type']?.startsWith('application/json'))return json(res,415,{error:'Gunakan JSON.'});
    requests=requests.filter(t=>Date.now()-t<60000);
    if(busy>=2||requests.length>=12)return json(res,429,{error:'Terlalu banyak permintaan. Tunggu sebentar.'});
-   let body='';try{for await(const chunk of req){body+=chunk;if(Buffer.byteLength(body)>24000)return json(res,413,{error:'Pesan terlalu panjang.'})}}catch{return json(res,400,{error:'Pesan tidak terbaca.'})}
+   let body='';try{if(req.body!==undefined){body=typeof req.body==='string'?req.body:JSON.stringify(req.body)}else{for await(const chunk of req){body+=chunk;if(Buffer.byteLength(body)>24000)return json(res,413,{error:'Pesan terlalu panjang.'})}}if(Buffer.byteLength(body)>24000)return json(res,413,{error:'Pesan terlalu panjang.'})}catch{return json(res,400,{error:'Pesan tidak terbaca.'})}
    let payload;try{payload=JSON.parse(body)}catch{return json(res,400,{error:'JSON tidak valid.'})}
    const history=payload?.messages;
    if(!Array.isArray(history)||!history.length||history.length>16||history.some(m=>!m||!['user','model'].includes(m.role)||typeof m.text!=='string'||!m.text.trim()||m.text.length>2400)||history.at(-1).role!=='user')return json(res,400,{error:'Format atau panjang pesan tidak valid.'});

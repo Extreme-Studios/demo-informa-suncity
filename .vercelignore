@@ -1,0 +1,8 @@
+work
+test
+.git
+.env*
+read-credential.ps1
+node_modules
+dist
+*.log
