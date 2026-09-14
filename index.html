@@ -1,14 +1,23 @@
 <!doctype html>
 <html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>INFORMA Suncity Sidoarjo — A space for your story</title><link rel="stylesheet" href="style.css"></head>
-<body>
+<body class="at-opening">
+<div id="immersive" aria-hidden="true"><canvas id="sceneCanvas"></canvas><div id="floatLayers"></div><div class="scene-wash"></div></div>
+<section id="opening" aria-label="Pembuka INFORMA Suncity">
+ <div class="opening-top"><img src="assets/logo.webp" alt="INFORMA"><span>SUNCITY SIDOARJO<br><small>A PERSONAL SHOWROOM EXPERIENCE</small></span></div>
+ <div class="opening-copy"><p class="opening-kicker">WELCOME TO YOUR NEXT CHAPTER</p><h1>Furnishings<br>with <em>Style.</em></h1><p>Ruang yang Anda impikan.<br>Lebih dekat, di Suncity Sidoarjo.</p><button id="enterExperience"><span class="open-circle">↗</span><span>OPEN<span class="open-small">JELAJAHI SHOWROOM</span></span></button></div>
+ <span class="pointer-guide">GERAKKAN POINTER · SENTUH FURNITURNYA</span>
+ <div class="opening-bottom"><span>INTERNAL DEMO ONLY — Unofficial Concept for Evaluation</span><span>Digital Experience by Extreme Studios AI</span></div>
+</section>
 <main class="experience">
  <div class="visual"><img id="heroImage" alt="Inspirasi ruang tamu dari INFORMA"><div class="shade"></div></div>
  <div class="demo">INTERNAL DEMO ONLY <span>— Unofficial Concept for Evaluation</span></div>
- <header><a class="brand" href="#" aria-label="Kembali ke pembuka">INFORMA<span>SUNCITY SIDOARJO</span></a><button class="location" data-open="visit">Sidoarjo, Jawa Timur <span>↗</span></button></header>
+ <header><button class="brand back-opening" aria-label="Kembali ke pembuka"><img src="assets/logo.webp" alt="INFORMA"><span>SUNCITY SIDOARJO</span></button><button class="location" data-open="visit">Sidoarjo, Jawa Timur <span>↗</span></button></header>
  <section class="hero"><p class="eyebrow"><span></span> YOUR HOME. YOUR STORY. YOUR SUNCITY.</p><h1>Ruang untuk<br>cerita <em>Anda.</em></h1><p class="intro">Temukan rasa nyaman yang paling personal.<br>Mulai di sini. Rasakan langsung di Suncity Sidoarjo.</p><button class="primary" data-open="contact">Cek Harga & Stok via WhatsApp <span>↗</span></button><p class="micro">Konsultasikan pilihan Anda dengan tim Suncity</p></section>
  <div class="scene-caption"><span>01 / LIVING STORIES</span><p>Hangat. Dekat. Terasa seperti rumah.</p><small>Visual inspirasi INFORMA • bukan foto cabang</small></div>
  <nav class="portals" aria-label="Jelajahi pengalaman"><button data-open="shopper"><span class="num">01</span><div><small>PERSONAL GUIDANCE</small><h2>AI Personal Shopper</h2><p>Temukan yang cocok untuk Anda.</p></div><span class="arrow">↗</span></button><button data-open="room"><span class="num">02</span><div><small>IMAGINE YOUR SPACE</small><h2>Build My Room</h2><p>Mulai dari ruang impian Anda.</p></div><span class="arrow">↗</span></button><button data-open="explore"><span class="num">03</span><div><small>A CLOSER LOOK</small><h2>Explore Suncity Showroom</h2><p>Kenali pilihan sebelum berkunjung.</p></div><span class="arrow">↗</span></button></nav>
  <footer><span>A MORE PERSONAL SHOWROOM EXPERIENCE</span><span>Digital Experience by <b>Extreme Studios AI</b></span><button data-open="sources">Sumber visual ↗</button></footer>
 </main>
 <dialog id="panel"><div class="panel-head"><a class="brand">INFORMA<span>SUNCITY SIDOARJO</span></a><button id="close" class="close" aria-label="Tutup panel">✕</button></div><div id="content"></div></dialog>
-<script src="app.js"></script></body></html>
+<button id="chatLauncher" aria-label="Buka chatbot Gemini"><span>✦</span> Tanya asisten</button>
+<aside id="chat" aria-label="Asisten AI Suncity" hidden><div class="chat-head"><div><b>Asisten Suncity</b><small>AI personal shopper · Gemini</small></div><button id="chatClose" aria-label="Tutup chatbot">✕</button></div><div id="chatLog" role="log" aria-live="polite"><p class="bubble model">Halo! Ruang seperti apa yang ingin Anda wujudkan? Saya bantu mulai dari gaya dan kebutuhan furnitur Anda.</p></div><div class="chat-suggestions"><button>Sofa untuk ruang kecil</button><button>Gaya natural yang hangat</button></div><form id="chatForm"><label for="chatInput" class="sr-only">Pesan Anda</label><textarea id="chatInput" maxlength="2400" rows="2" placeholder="Ceritakan kebutuhan ruang Anda…" required></textarea><button id="chatSend" aria-label="Kirim pesan">↑</button></form><small class="chat-note">Pesan diproses oleh Google Gemini. Harga & stok perlu konfirmasi sales.</small></aside>
+<link rel="stylesheet" href="experience.css"><script src="/vendor/gsap.min.js"></script><script src="app.js"></script><script type="module" src="experience.js"></script></body></html>

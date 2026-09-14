@@ -1,0 +1,1 @@
+{"name":"informa-suncity-experience","version":"0.2.0","private":true,"scripts":{"start":"node server.cjs","test":"node --test test/server.test.cjs"},"dependencies":{"three":"0.180.0","gsap":"3.13.0"}}
