@@ -41,7 +41,7 @@ function createServer({keyProvider=getKey,fetcher=fetch}={}){
   }
   if(!['GET','HEAD'].includes(req.method)){res.writeHead(405).end();return}
   const vendor={'/vendor/three.module.js':'node_modules/three/build/three.module.js','/vendor/three.core.js':'node_modules/three/build/three.core.js','/vendor/gsap.min.js':'node_modules/gsap/dist/gsap.min.js'};
-  const publicFiles=['/index.html','/style.css','/app.js','/experience.js','/experience.css','/branch.css','/planner.js','/planner.css','/products.json'];
+  const publicFiles=['/index.html','/style.css','/app.js','/experience.js','/experience.css','/branch.css','/planner.js','/planner.css','/products.json','/showroom.js','/showroom.css'];
   const isAsset=/^\/assets\/[a-zA-Z0-9_.-]+\.(jpeg|jpg|webp|png|svg)$/.test(pathname);
   if(pathname==='/')pathname='/index.html';
   if(!publicFiles.includes(pathname)&&!isAsset&&!vendor[pathname]){res.writeHead(404).end();return}
