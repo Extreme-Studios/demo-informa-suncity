@@ -1,12 +1,14 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const products=require('../products.json'),{createServer}=require('../backend.cjs');
 test('all five showroom categories render official images and working inquiry controls',()=>{
- const vm=require('node:vm'),ctx={window:{}};vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../showroom.js'),'utf8'),ctx);
+ const vm=require('node:vm'),ctx={window:{NayaI18n:require('../i18n.js')}};
+ vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../showroom.js'),'utf8'),ctx);
  assert.deepEqual(Object.keys(ctx.window.showroomCollections),['Living','Dining','Bedroom','Workspace','Decor']);
  for(const [zone,c] of Object.entries(ctx.window.showroomCollections)){
   assert.equal(c.products.length,3);const html=ctx.window.renderShowroom(zone);
   assert.ok(html.includes('showroom-hero'));assert.equal((html.match(/data-inquiry=/g)||[]).length,3);
-  assert.ok(html.includes('bukan foto cabang'));assert.ok(html.includes('aria-pressed="true"'));
+  assert.ok(html.includes('not a branch photo') || html.includes('bukan foto cabang'));
+  assert.ok(html.includes('aria-pressed="true"'));
   for(const p of c.products)assert.ok(products.some(x=>x.sku===p.sku&&x.image===p.image));
   for(const img of html.matchAll(/src="([^"]+)"/g))assert.ok(fs.statSync(path.join(__dirname,'..',img[1])).size>100);
  }

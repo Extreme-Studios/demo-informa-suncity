@@ -1,22 +1,58 @@
-# INFORMA Sun City — internal concept
+# INFORMA Sun City Sidoarjo | Naya Sales Agent
 
-Mobile-first single-screen microsite. Run `npm ci`, then `npm start` and open http://localhost:4173. Three.js renders lifestyle scene transitions; GSAP coordinates the opening and panels. Official lifestyle photos are bundled in assets. Floating foreground crops are 2.5D, not rotatable furniture models.
+> **Unofficial Concept Demo.** This portfolio prototype is not an official INFORMA sales channel. Product prices are reference snapshots. Branch inventory, payment, and delivery require seller confirmation.
 
-Personal Shopper opens the Gemini chatbot. Room planner and category explorer remain concept panels. Consultation summary can be copied. Set WHATSAPP_NUMBER in app.js only after branch approval. No live stock integration.
+[Live Demo](https://demo-informa-suncity.vercel.app/)
 
-The local backend reads the existing Windows generic credential through read-credential.ps1, keeping the key in server memory only. Cloud hosting must use a server-side GEMINI_API_KEY secret; it cannot access this computer's Credential Manager. GEMINI_MODEL defaults to gemini-2.5-flash. This server binds localhost and rejects remote Host/Origin values; it is deliberately local-only until hosting/authentication and usage controls are configured. Do not publish the API unauthenticated. npm test checks validation, origin rejection, and isolation of server/credential files.
+## Overview
 
-Lifestyle and product assets: https://informa.co.id/shop-the-look (2026-09-14), Local Furniture Collection, Serene Bedroom, Modern Comfort Family Room. Official current anniversary logo downloaded from the same page. Tagline source: https://informa.co.id/csr-events/informa-anniversary-15. These are central-brand visuals, not Suncity branch photographs.
+Naya is a **Zero-Deflection Digital-Human Sales Agent** for INFORMA Sun City Mall Sidoarjo. Naya guides product discovery, comparisons, Build My Room, and checkout in one conversation. The UI defaults to English and supports Indonesian through the language toggle or `?lang=id`. The chat detects the language of each message. The local router handles common English and Indonesian shopping requests, including furniture typos and requests for multiple product types. For free-form consultation, Gemini follows the language of the latest message or the customer's explicit language request. Sharing a name is optional.
 
-Official image source: https://informa.co.id/room-of-inspiration/living_room (reviewed 2026-09-14). Four category images referenced from its CDN; rights retained by owners. They are not Suncity branch photographs. No invented product names, prices or availability. Assets require external network access; fonts have local fallbacks.
+The interactive cart persists by SKU and quantity and restores prices from the catalog. Returning visitors with saved items can reopen their cart or start a new order. Checkout creates an itemized invoice with a reference number, copy and print actions, and an option to edit before handoff. After the customer confirms their receipt is ready, the WhatsApp link opens a prefilled order message for sales. Customers send the message and attach the receipt in WhatsApp. **Finish Shopping** clears the current cart, invoice draft, and chat session.
 
-This is an unofficial internal demonstration. Domain and live hosting have not been configured. Source can be managed in a private GitHub repository. GitHub Pages commercial-use restrictions must be reviewed before hosting this sales-oriented demo there; storing source on GitHub is separate from hosting.
-## Build My Room: 30 produk resmi
+## Architecture
 
-Identitas: INFORMA Sun City Mall Sidoarjo. Alamat: Lantai 1 Mall Sun City, Jl. Pahlawan No. 01, RW 6, Sidokumpul, Sidoarjo, Jawa Timur 61213. Sumber: https://informa.co.id/store-locations/list-maps?page=7 (14 September 2026).
+```mermaid
+flowchart LR
+  Visitor --> UI[Showroom and Naya workspace]
+  UI --> Router[Per-message language and hybrid intent router]
+  Router --> Catalog[Fuzzy catalog search and balanced product cards]
+  Router --> API[Vercel POST /api/chat]
+  API --> Gemini[Gemini generateContent]
+  Catalog --> Cards[Product cards and official links]
+  API --> Cards
+  Cards --> Cart[SKU cart in localStorage]
+  Cart --> Invoice[Itemized invoice snapshot with copy and print]
+  Invoice --> Receipt[Customer confirms receipt is ready]
+  Receipt --> WhatsApp[Localized WhatsApp confirmation]
+  WhatsApp --> Sales[Sales verifies the receipt]
+```
 
-products.json memuat 30 SKU unik, 8 kategori, tautan produk dan URL gambar sumber. Foto lokal di assets; 5 cutout transparan resmi. Sumber: https://informa.co.id/shop-the-look dan https://www.ruparupa.com/c/shop-the-look/cozy-living-room.html. Hak foto/merek tetap milik pemiliknya; demo internal tidak menyatakan izin publikasi komersial.
+## Guardrails
 
-Planner: filter, pagination, tambah/hapus, geser pointer/touch/keyboard, ukuran visual, susunan depan-belakang, ringkasan nama/SKU. Pilihan selama halaman aktif. Komposisi 2D, bukan denah berskala. Tanpa harga/stok cabang. Nomor WhatsApp belum dikonfigurasi; pesan dapat disalin.
+- Recommendation cards, links, SKUs, and invoice totals come from catalog records. The model cannot set prices, add discounts, or confirm stock.
+- Gemini runs behind a server-side route. The API validates requests, limits upstream traffic, and checks for English/Indonesian language mismatches in those turns. The API key remains on the server.
+- The receipt checkbox records customer confirmation. The site does not collect payment or attach files to WhatsApp. Sales verifies the receipt after the customer sends it.
+- The room planner is a visual 2D composition tool. Product and lifestyle imagery comes from [INFORMA](https://informa.co.id/shop-the-look) and [Ruparupa](https://www.ruparupa.com/informastore/). Rights remain with their respective owners.
 
-Verifikasi: npm test (katalog, semua aset, PNG, chat dan secret); browser desktop dan 390x844 (gambar termuat, tambah/hapus, ukuran, tombol panah, ringkasan). Modal dapat digulir di layar kecil; pembuka satu layar.
+## Tech stack
+
+- Vanilla HTML, CSS, and JavaScript for the showroom, chat, planner, and checkout
+- Three.js and GSAP for showroom visuals and transitions
+- Node.js for local development and Vercel for static assets and `/api/chat`
+- Google Gemini REST API for free-form consultation. Deterministic shopping intents use the local catalog.
+
+## Local setup
+
+1. Install Node.js 22 or later and run `npm ci`.
+2. Set `GEMINI_API_KEY` in the server process environment. Set `GEMINI_MODEL` only to override the default `gemini-2.5-flash`. On Windows, the existing local credential helper can supply the key.
+3. Run `npm start` and open [localhost:4173](http://localhost:4173/). Use `PORT` to select another port.
+4. Run `npm test` for regressions and `npm run build` to generate the static assets in `dist/`. Configure Gemini variables in the Vercel project environment so `/api/chat` can access them at runtime.
+
+## Credits
+
+**Developer** · Adi Nugroho (Mochammad Fajar Adi)
+
+**Studio** · Extreme Studios AI
+
+[GitHub](https://github.com/Extreme-Studios) · [LinkedIn](https://www.linkedin.com/in/adi-nugroho-1a819a378/) · [Email](mailto:3xtremestudios@gmail.com)

@@ -1,8 +1,13 @@
 work
 test
 .git
-.env*
 read-credential.ps1
 node_modules
 dist
 *.log
+logs/
+tmp/
+screenshots/
+test-results/
+playwright-report/
+coverage/

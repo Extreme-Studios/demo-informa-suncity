@@ -2,6 +2,12 @@ node_modules/
 work/
 .env*
 *.log
+logs/
+tmp/
+screenshots/
+test-results/
+playwright-report/
+coverage/
 .vercel/
 dist/
 
